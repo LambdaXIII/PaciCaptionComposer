@@ -59,6 +59,7 @@ BasicInputControl {
 
   function text_to_value(text) {
     let t = text.toUpperCase()
+    df = false
     if (t.indexOf(".") >= 0 || t.indexOf("DF") >= 0)
       df = true
     let ns = t.replace("DF")
