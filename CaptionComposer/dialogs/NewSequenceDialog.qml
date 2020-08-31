@@ -38,7 +38,7 @@ QoolDialogWindow {
         id: dropframeField
         title: qsTr("帧数计算模式")
         showTitle: false
-        text: checked ? qsTr("不丢帧") : qsTr("不帧")
+        text: checked ? qsTr("不丢帧") : qsTr("丢帧")
         width: parent.width
         checked: true
       }
