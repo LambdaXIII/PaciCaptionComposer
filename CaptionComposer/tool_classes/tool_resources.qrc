@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>baidu_translate_languages.cn.txt</file>
+    </qresource>
+</RCC>
