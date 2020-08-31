@@ -81,24 +81,26 @@ QoolAbstractButton {
         text: qsTr("未激活")
       }
     }
-    QoolTextField {
-      z: 30
-      id: tagNameField
-      width: tagText.width
-      height: tagText.height
-      x: tagText.x
-      y: tagText.y
-      visible: false
-      onEditingFinished: {
-        if (trackTag !== text) {
-          root.track.tag = text
-          UIBrain.mainDocument.justEdited()
-        }
-        tagNameField.visible = false
+  } //contentItem
+
+  QoolTextField {
+    z: 80
+    id: tagNameField
+    width: tagText.width
+    height: tagText.height
+    x: tagText.x
+    y: tagText.y
+    visible: false
+    onEditingFinished: {
+      if (trackTag !== text) {
+        root.track.tag = text
+        UIBrain.mainDocument.justEdited()
       }
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
+      tagNameField.visible = false
     }
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    anchors.fill: parent.contentItem
   }
 
   MouseArea {
@@ -133,6 +135,7 @@ QoolAbstractButton {
         tagNameField.text = trackTag
         tagNameField.selectAll()
         tagNameField.visible = true
+        tagNameField.forceActiveFocus()
       }
     }
     Action {
