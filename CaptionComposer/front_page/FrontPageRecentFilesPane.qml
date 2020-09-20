@@ -39,14 +39,17 @@ QoolControl {
         color: hovered ? QoolStyle.highlightColor : QoolStyle.textColor
       }
       anchors.horizontalCenter: parent.horizontalCenter
-      ToolTip.delay: 1000
-      ToolTip.timeout: 5000
-      ToolTip.visible: hovered
-      ToolTip.text: model.path
+
+      QoolToolTip {
+        text: model.path
+        closeInterval: 5000
+        openInterval: 1000
+      }
+
       onClicked: {
         UIBrain.mainDocument.openDocument(model.fileURL, model.format)
         UIBrain.wantToShowMainPage()
       }
-    }
+    } //delegate
   }
 }
