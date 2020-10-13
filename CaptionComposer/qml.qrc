@@ -68,5 +68,7 @@
         <file>assets/CaptionComposer_bigicon.tiff</file>
         <file>main_page/TrackViewScrollBar.qml</file>
         <file>main_page/DisabledCover.qml</file>
+        <file>assets/images/bookshelf.jpg</file>
+        <file>assets/images/papers.jpg</file>
     </qresource>
 </RCC>

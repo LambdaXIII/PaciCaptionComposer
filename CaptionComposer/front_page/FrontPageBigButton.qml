@@ -8,59 +8,38 @@ QoolButton {
 
   showTitle: false
 
-  property string desciption
+  property string description
   property string centerImage
-  property alias upperBackgroundColor: upperBackground.backColor
+  property color textColor: QoolStyle.textColor
 
+  //  property alias upperBackgroundColor: upperBackground.backColor
   animationEnabled: true
   topPadding: backBox.strokeWidth
   backBox.cutSize: QoolStyle.controlCutSize
+  backBox.imagePath: centerImage
+
+  rightPadding: 10
+  bottomPadding: 20
 
   contentItem: Item {
-    Rectangle {
-      id: bottomTextRect
-      color: "lightgrey"
-      anchors.bottom: parent.bottom
-      anchors.left: parent.left
+    Text {
+      id: buttonName
+      text: control.text
+      font.pixelSize: 24
       anchors.right: parent.right
-      height: 60
-      Text {
-        id: bottomText
-        text: control.text
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignTop
-        font.pixelSize: 24
-      }
-      Text {
-        id: descriptionText
-        anchors.top: bottomText.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        text: control.desciption
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignBottom
-        font.pixelSize: 12
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        fontSizeMode: Text.Fit
-      }
+      anchors.bottom: descText.top
+      color: control.textColor
+      font.bold: true
     }
-    CutCornerBox {
-      id: upperBackground
-      cutSize: backBox.cutSize
-      anchors.fill: parent
-      anchors.bottomMargin: bottomTextRect.height
-      hasStroke: false
-      Image {
-        source: control.centerImage
-        fillMode: Image.PreserveAspectFit
-        width: 64
-        height: 64
-        anchors.centerIn: parent
-      }
+
+    Text {
+      id: descText
+      text: control.description
+      horizontalAlignment: Qt.AlignRight
+      anchors.right: parent.right
+      anchors.left: parent.left
+      anchors.bottom: parent.bottom
+      color: control.textColor
     }
-  }
+  } //contentItem
 }
