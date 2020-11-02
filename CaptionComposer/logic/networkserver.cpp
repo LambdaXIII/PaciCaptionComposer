@@ -7,15 +7,6 @@
 NetworkServer::NetworkServer(QObject* parent)
   : QObject(parent)
   , m_networkManager(new QNetworkAccessManager(this)) {
-  connect(m_networkManager,
-    &QNetworkAccessManager::networkAccessibleChanged, [this] {
-      emit this->networkAccessibleChanged(this->networkAccessible());
-    });
-}
-
-bool NetworkServer::networkAccessible() const {
-  return m_networkManager->networkAccessible()
-         == QNetworkAccessManager::Accessible;
 }
 
 void NetworkServer::wantBaiduToTranslate(
@@ -28,14 +19,22 @@ void NetworkServer::wantBaiduToTranslate(
   handler->deleteLater();
 
   auto* reply = m_networkManager->get(QNetworkRequest(encoded_url));
+
   connect(reply, &QNetworkReply::finished, [reply, clip]() {
-    QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-    qDebug() << doc;
-    auto p = doc["trans_result"][0]["dst"].toString().simplified();
-    if (! p.isEmpty()) {
-      clip->setExtraProperty("translate_history", clip->content());
-      clip->setContent(p);
+    if (reply->error() == QNetworkReply::NoError) {
+      QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+      qDebug() << doc;
+      auto p = doc["trans_result"][0]["dst"].toString().simplified();
+      if (! p.isEmpty()) {
+        clip->setExtraProperty("translate_history", clip->content());
+        clip->setContent(p);
+      }
     }
+    reply->deleteLater();
+  });
+
+  connect(reply, &QNetworkReply::errorOccurred, [reply]() {
+    qDebug() << "Error Occurred:" << reply->errorString();
     reply->deleteLater();
   });
 }

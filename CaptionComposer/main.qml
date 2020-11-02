@@ -43,7 +43,7 @@ QoolWindow {
       fontDesigner.item.editingSequenceFont = true
       fontDesigner.item.show()
     }
-    function onWantToEditTrackFont() {
+    function onWantToEditTrackFont(targetTrack) {
       fontDesigner.source = fontDesigner.defaultQML
       fontDesigner.item.editingSequenceFont = false
       fontDesigner.item.targetTrack = targetTrack

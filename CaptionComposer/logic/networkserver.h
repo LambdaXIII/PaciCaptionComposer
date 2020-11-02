@@ -11,15 +11,8 @@
 class NetworkServer: public QObject {
   Q_OBJECT
   PA_CONSTANT_PROPERTY(QNetworkAccessManager*, networkManager)
-  Q_PROPERTY(bool networkAccessible READ networkAccessible NOTIFY
-      networkAccessibleChanged)
-
 public:
   explicit NetworkServer(QObject* parent = nullptr);
-  bool networkAccessible() const;
-
-signals:
-  void networkAccessibleChanged(bool accessable);
 
 public slots:
   void wantBaiduToTranslate(const QString& langName, paci::Clip* clip);
