@@ -23,7 +23,7 @@ set_source_files_properties(${myApp_ICON} PROPERTIES
        MACOSX_PACKAGE_LOCATION "Resources")
 
 
-find_package(Qt5 COMPONENTS Core Quick Qml Svg Network REQUIRED)
+find_package(Qt6 COMPONENTS Core Quick QuickControls2 Qml Svg Network REQUIRED)
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_FILES)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/logic SRC_FILES)
@@ -41,7 +41,7 @@ set_target_properties(CaptionComposer PROPERTIES
 target_compile_definitions(CaptionComposer
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(CaptionComposer
-  Qt5::Core Qt5::Quick Qt5::Qml Qt5::Svg
+  Qt6::Core Qt6::Quick Qt6::Qml Qt6::Svg
 #  PaciOneUIKit
   QoolUI PaciFontDesigner
    PaciFormat PaciCore PaciBase PaciFortune

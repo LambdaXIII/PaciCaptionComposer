@@ -162,7 +162,7 @@ QoolAbstractButton {
     }
     QoolMenu {
       title: qsTr("百度翻译")
-      enabled: UIBrain.networkServer.networkAccessible
+      //      enabled: UIBrain.networkServer.networkAccessible
       BaiduTransAPIHandler {
         id: hdl
       }

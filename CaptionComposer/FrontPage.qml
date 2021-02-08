@@ -1,4 +1,4 @@
-import QtQuick 2.13
+import QtQuick 2.14
 import "front_page"
 import "dialogs"
 import Paci.CaptionComposer 1.0

@@ -43,9 +43,9 @@ void BaiduTransAPIHandler::loadLangNames() {
   QTextStream s(&f);
   while (! s.atEnd()) {
     auto line = s.readLine();
-    auto ps = line.splitRef(" ");
-    auto code = ps.first().toString().simplified();
-    auto name = ps.last().toString().simplified();
+    auto ps = line.split(" ");
+    auto code = ps.first().simplified();
+    auto name = ps.last().simplified();
     if (code != "auto") {
       m_langNames << name;
       m_langCodes << code;

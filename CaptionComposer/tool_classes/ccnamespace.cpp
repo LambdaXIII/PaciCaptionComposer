@@ -26,7 +26,7 @@ int CCNamespace::how_many_lines(const QString& s) {
     return 0;
   if (! a.contains("\n"))
     return 0;
-  auto ls = a.splitRef("\n");
+  auto ls = a.split("\n");
   return ls.length();
 }
 

@@ -65,10 +65,10 @@
         <file>assets/images/premiere.jpg</file>
         <file>dialogs/UserFortuneDialog.qml</file>
         <file>dialogs/AboutDialog.qml</file>
-        <file>assets/CaptionComposer_bigicon.tiff</file>
         <file>main_page/TrackViewScrollBar.qml</file>
         <file>main_page/DisabledCover.qml</file>
         <file>assets/images/bookshelf.jpg</file>
         <file>assets/images/papers.jpg</file>
+        <file>assets/CaptionComposer_bigicon.png</file>
     </qresource>
 </RCC>

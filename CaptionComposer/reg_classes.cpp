@@ -15,6 +15,15 @@
 
 #include <QQmlEngine>
 
+#include "pacicore/TimePoint.h"
+#include <QJSValue>
+
+template<>
+paci::TimePoint::TimePoint(QJSValue x){
+  auto s = warlock::positiveGate(x.toNumber());
+  m_data = TimeNumber(std::round(s));
+}
+
 void register_classes() {
   //#define REG3(cls)                                                      \
 //  qmlRegisterType<paci::cls>("Paci.Core", 1, 0, "PA" #cls);
@@ -23,18 +32,22 @@ void register_classes() {
   qmlRegisterUncreatableType<paci::cls>(                               \
     "Paci.Core", 1, 0, "PA" #cls, "Can not create" #cls);
 
+#define REG_DATA(cls)                                                       \
+  qmlRegisterUncreatableType<paci::cls>(                               \
+    "Paci.Core", 1, 0, "pa" #cls, "Can not create" #cls);
+
 #define REG2(cls)                                                      \
   qmlRegisterType<paci::cls>("Paci.Core", 1, 0, "PA" #cls);
 
   REG(Clip)
-  REG(Color)
+  REG_DATA(Color)
   REG(Track)
   REG(FontInfo)
-  REG(Timebase)
-  REG(TimePoint)
+  REG_DATA(Timebase)
+  REG_DATA(TimePoint)
   REG(Sequence)
   REG(TrackManager)
-  REG(FormatProfiler)
+  REG_DATA(FormatProfiler)
 
 #undef REG
 #undef REG2
@@ -51,17 +64,17 @@ void register_classes() {
 
   qmlRegisterUncreatableType<MainDocument>(
     CC_ERI, "MainDocument", "Can not create.");
-  qmlRegisterUncreatableType<paci::FormatProfiler>(
-    CC_ERI, "FormatProfiler", "Thsi can not create.");
+//  qmlRegisterUncreatableType<paci::FormatProfiler>(
+//    CC_ERI, "FormatProfiler", "Thsi can not create.");
   qmlRegisterType<TrackModel>(CC_ERI, "TrackModel");
   qmlRegisterType<SequenceModel>(CC_ERI, "SequenceModel");
   qmlRegisterType<FileListModel>(CC_ERI, "FileListModel");
   qmlRegisterType<SequenceInfoGenerator>(
     CC_ERI, "SequenceInfoGenerator");
 
-  qmlRegisterUncreatableType<FileRecord>(CC_ERI, "FileRecord", "");
+  qmlRegisterUncreatableType<FileRecord>(CC_ERI, "fileRecord", "");
   qmlRegisterUncreatableType<FileRecordList>(
-    CC_ERI, "FileRecordList", "");
+    CC_ERI, "fileRecordList", "");
   qmlRegisterUncreatableType<NetworkServer>(
     CC_ERI, "NetworkServer", "");
   qmlRegisterType<BaiduTransAPIHandler>(CC_ERI, "BaiduTransAPIHandler");

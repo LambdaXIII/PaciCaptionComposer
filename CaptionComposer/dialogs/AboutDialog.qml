@@ -13,7 +13,7 @@ QoolDialogWindow {
     y: 25
     width: 256
     height: 256
-    source: "qrc:/assets/CaptionComposer_bigicon.tiff"
+    source: "qrc:/assets/CaptionComposer_bigicon.png"
     fillMode: Image.PreserveAspectFit
   }
 

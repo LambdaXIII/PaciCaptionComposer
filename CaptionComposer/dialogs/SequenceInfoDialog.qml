@@ -6,7 +6,7 @@ import Paci.Core 1.0
 //import CommonQml.PAStyles 1.0
 //import QtQuick.Layouts 1.12
 import Paci.CaptionComposer 1.0
-import QtGraphicalEffects 1.13
+//import QtGraphicalEffects 1.13
 import Qool.Controls 1.0
 import Qool.Components 1.0
 import Qool.Styles 1.0

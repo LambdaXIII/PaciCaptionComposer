@@ -5,7 +5,7 @@
 
 struct FileRecord {
   QString path, formatCode;
-  bool operator==(const FileRecord& other) {
+  bool operator==(const FileRecord& other) const {
     return path == other.path && formatCode == other.formatCode;
   }
 

@@ -109,7 +109,6 @@ Pane {
     delegate: ClipInfoButton {
       currentClip: model.clip
       currentClipIndex: model.clipIndex
-      //            x: (parent.width - scrollBar.width - width) / 2
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.horizontalCenterOffset: 0 - scrollBar.width / 2
       width: root.implicitContentWidth
