@@ -24,7 +24,7 @@ QoolWindow {
 
   CloseWindowDialog {
     id: closeWindowDialog
-    onCanceled: Qt.quit()
+    onCanceled: Qt.exit(0)
   }
 
   onClosing: {
