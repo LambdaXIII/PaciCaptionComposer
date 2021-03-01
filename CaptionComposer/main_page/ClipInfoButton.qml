@@ -7,37 +7,76 @@ import Paci.CaptionComposer 1.0
 import Qool.Components 1.0
 import QtQuick.Layouts 1.13
 
-QoolAbstractButton {
+QoolControl {
   id: element
-  width: 450
-  height: defaultHeight
-  implicitHeight: 65
-  implicitWidth: 450
 
-  //  alterBackgroundColor: false
+  implicitWidth: Math.max(
+                   contentText.implicitWidth,
+                   titleText.width + backBox.cutSize) + leftPadding + rightPadding
+
+  width: parent ? Math.min(parent.width, implicitWidth) : implicitWidth
+  extraContentPadding: 2
+
+  backBox.strokeColor: themeControl.uiColor
+  backBox.strokeWidth: 1
+  titleText.color: themeControl.uiColor
+  titleText.anchors.leftMargin: backBox.cutSize
+  titleText.font.pixelSize: themeControl.timecodeSize
+  backBox.backColor: themeControl.backgroundColor
+  backBox.cutSize: 5
+  showTitle: true
+  title: editingMode ? timeFormatter.full : timeFormatter.start
+
   property PAClip currentClip
   property int currentClipIndex
   property real defaultHeight
+  property real defaultWidth
+  property bool editingMode: false
+
+  Component.onCompleted: {
+    defaultHeight = height
+    defaultWidth = width
+  }
+
+  Behavior on height {
+    NumberAnimation {}
+  }
+
+  Behavior on width {
+    NumberAnimation {}
+  }
 
   QtObject {
     id: themeControl
     property int timecodeSize: QoolStyle.controlTitleFontPixelSize
-  }
+    property color uiColor: element.editingMode ? QoolStyle.infoColor : mainMouseArea.hovered ? QoolStyle.highlightColor : QoolStyle.backgroundStrokeColor
+    property color backgroundColor: element.editingMode ? QoolStyle.controlBackgroundColor2 : QoolStyle.controlBackgroundColor
 
-  showTitle: true
-  title: "#" + currentClipIndex
+    Behavior on uiColor {
+      ColorAnimation {
+        duration: 200
+      }
+    }
+
+    Behavior on backgroundColor {
+      ColorAnimation {
+        duration: 200
+      }
+    }
+  } //themeControl
 
   QtObject {
     id: timeFormatter
     property string start: UIBrain.showTime(currentClip.startTime)
     property string duration: UIBrain.showTime(currentClip.durationTime)
     property string end: UIBrain.showTime(currentClip.endTime)
+    property string full: timeFormatter.start + " -> " + timeFormatter.end
     function refreshTimes() {
       start = UIBrain.showTime(currentClip.startTime)
       duration = UIBrain.showTime(currentClip.durationTime)
       end = UIBrain.showTime(currentClip.endTime)
     }
-  }
+  } //timeFormatter
   Connections {
     target: UIBrain
     function onCurrentTimeShowingModeChanged() {
@@ -46,164 +85,81 @@ QoolAbstractButton {
   }
   Connections {
     target: currentClip
-    function onStartTimeChanged() {
-      timeFormatter.refreshTimes()
-    }
-    function onDurationTimeChanged() {
+    function onAnyTimeChanged() {
       timeFormatter.refreshTimes()
     }
   }
 
-  contentItem: Item {
-    implicitHeight: startTimeText.implicitHeight + contentText.implicitHeight
-    Text {
-      id: startTimeText
-      text: timeFormatter.start
-      verticalAlignment: Text.AlignBottom
-      anchors.bottom: parent.bottom
-      anchors.left: parent.left
-      font.pixelSize: themeControl.timecodeSize
-      color: QoolStyle.backgroundStrokeColor
+  contentItem: Text {
+    id: contentText
+    text: currentClip.content
+    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+    horizontalAlignment: Text.AlignRight
+    verticalAlignment: Text.AlignBottom
+    color: QoolStyle.textColor
+    width: parent.width
+    font.pixelSize: 14
+    leftPadding: 10
+    topPadding: 0
+    DisabledCover {
+      z: 10
+      visible: !currentClip.isActivated
+      text: qsTr("本条字幕未激活")
+      anchors.fill: parent
     }
-
-    Text {
-      id: endTimeText
-      text: timeFormatter.end
-      horizontalAlignment: Text.AlignRight
-      verticalAlignment: Text.AlignBottom
-      anchors.right: parent.right
-      anchors.bottom: parent.bottom
-      font.pixelSize: themeControl.timecodeSize
-      color: QoolStyle.backgroundStrokeColor
-    }
-
-    Text {
-      id: durationTimeText
-      text: timeFormatter.duration
-      verticalAlignment: Text.AlignBottom
-      horizontalAlignment: Text.AlignHCenter
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      font.pixelSize: themeControl.timecodeSize
-      color: QoolStyle.backgroundStrokeColor
-    }
-
-    Text {
-      id: contentText
-      text: currentClip.content
-      fontSizeMode: Text.Fit
-      wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      anchors.right: parent.right
-      anchors.top: parent.top
-      anchors.bottom: startTimeText.top
-      anchors.left: parent.left
-      color: QoolStyle.textColor
-      font.pixelSize: 24
-      DisabledCover {
-        z: 10
-        visible: !currentClip.isActivated
-        text: qsTr("本条字幕未激活")
-        anchors.fill: parent
-      }
-    }
+    visible: !editingMode
   } //contentItem
 
   ClipEditWidget {
-    id: editWidget
-    z: 50
-    visible: false
+    id: editingField
     anchors.fill: parent
+    anchors.topMargin: element.topPadding
+    anchors.leftMargin: element.leftPadding
+    anchors.rightMargin: element.rightPadding
+    anchors.bottomMargin: element.bottomPadding
+    buttonColor: themeControl.uiColor
+    z: 55
+    visible: element.editingMode
+    onVisibleChanged: {
+      if (visible) {
+        text = contentText.text
+      }
+    }
     onAccepted: {
-      if (currentClip.content !== editWidget.text) {
-        currentClip.content = editWidget.text
+      if (currentClip.content !== editingField.text) {
+        currentClip.content = editingField.text
         UIBrain.mainDocument.justEdited()
       }
-      closeEdit()
+      close_edit()
     }
-    onRejected: closeEdit()
-  }
+    onRejected: close_edit()
+  } //editingField
 
   MouseArea {
+    id: mainMouseArea
+    property bool hovered: false
+    enabled: !editingField.visible
     anchors.fill: parent
-    acceptedButtons: Qt.RightButton
-    onClicked: cmenu.popup()
-    z: 30
+    containmentMask: parent.backBox
+    hoverEnabled: true
+    onClicked: {
+      open_edit()
+    }
+    onEntered: mainMouseArea.hovered = true
+    onExited: mainMouseArea.hovered = false
+    z: 80
   }
 
-  QoolMenu {
-    id: cmenu
-    title: qsTr("字幕信息")
-    showTitle: true
-    QoolMenuBanner {
-      text: qsTr("左键单击可以打开字幕内容编辑器")
-    }
-
-    Action {
-      checkable: true
-      checked: currentClip.isActivated
-      text: checked ? qsTr("已激活") : qsTr("未激活")
-      onToggled: {
-        if (currentClip.isActivated !== checked) {
-          currentClip.isActivated = checked
-          UIBrain.mainDocument.justEdited()
-        }
-      }
-    }
-    Action {
-      text: qsTr("编辑...")
-      onTriggered: openEdit()
-    }
-    QoolMenuSeparator {}
-    Action {
-      text: qsTr("加入我的语录")
-      onTriggered: UIBrain.settingManager.addUserFortune(currentClip.content)
-    }
-    QoolMenu {
-      title: qsTr("百度翻译")
-      //      enabled: UIBrain.networkServer.networkAccessible
-      BaiduTransAPIHandler {
-        id: hdl
-      }
-      GridLayout {
-        Repeater {
-          model: hdl.languages
-          delegate: AbstractButton {
-            Layout.fillWidth: true
-            CutCornerHighlightCover {
-              anchors.fill: parent
-              visible: down
-              cutSize: 2
-            }
-            contentItem: Text {
-              text: modelData
-              color: hovered ? QoolStyle.highlightColor : QoolStyle.textColor
-            }
-            onClicked: {
-              UIBrain.networkServer.wantBaiduToTranslate(modelData, currentClip)
-              UIBrain.mainDocument.justEdited()
-              cmenu.close()
-            }
-          } //delegate
-        }
-        columns: 2
-        columnSpacing: 2
-      }
-    }
-  } //menu
-
-  function openEdit() {
-    defaultHeight = element.height
-    element.height = 250
-    editWidget.text = currentClip.content
-    editWidget.visible = true
+  function open_edit() {
+    element.height = 200
+    if (parent)
+      element.width = parent.width
+    editingMode = true
   }
 
-  function closeEdit() {
-    editWidget.visible = false
+  function close_edit() {
     element.height = defaultHeight
+    element.width = defaultWidth
+    editingMode = false
   }
-
-  onClicked: openEdit()
 }

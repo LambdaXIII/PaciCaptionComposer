@@ -6,120 +6,105 @@ import Qool.Styles 1.0
 import Qool.Components 1.0
 import Qool.Controls 1.0
 
-Pane {
+QoolControl {
   id: rootPane
   property PATrack track
 
-  background: CutCornerBox {
-    imagePath: ":/assets/images/cinema_seats.jpg"
-    imageOpacity: 0.35
-    anchors.fill: parent
-  }
-  padding: 6
-  contentItem: ListView {
-    id: root
+  backBox.title: track && track.tag ? track.tag : qsTr("没东西呀")
+  backBox.imagePath: ":/assets/images/cinema_seats.jpg"
+  backBox.imageOpacity: 0.35
 
-    width: 300
+  extraContentPadding: 6
 
+  contentItem: Item {
     clip: true
-    spacing: 6
-    orientation: Qt.Vertical
+    ListView {
+      id: root
+      spacing: 6
+      orientation: Qt.Vertical
 
-    property real implicitContentWidth: Math.min(300,
-                                                 root.width - scrollBar.width)
+      cacheBuffer: 2000
 
-    cacheBuffer: 800
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      anchors.left: scrollBar.right
+      anchors.leftMargin: rootPane.extraContentPadding
+      //    populate: Transition {
+      //      id: popTransition
+      //      SequentialAnimation {
+      //        PropertyAction {
+      //          properties: "y"
+      //          value: popTransition.ViewTransition.destination.y + root.height
+      //        }
 
-    populate: Transition {
-      id: popTransition
-      SequentialAnimation {
-        PropertyAction {
-          properties: "y"
-          value: popTransition.ViewTransition.destination.y + root.height
-        }
+      //        PauseAnimation {
+      //          duration: popTransition.ViewTransition.index * 100
+      //        }
 
-        PauseAnimation {
-          duration: popTransition.ViewTransition.index * 100
-        }
-
-        NumberAnimation {
-          properties: "y"
-          duration: 500
-          easing.type: Easing.Bezier
-        }
+      //        NumberAnimation {
+      //          properties: "y"
+      //          duration: 500
+      //          easing.type: Easing.Bezier
+      //        }
+      //      }
+      //    }
+      TrackModel {
+        id: trackModel
+        track: rootPane.track
       }
-    }
+      model: trackModel
 
-    TrackModel {
-      id: trackModel
-      track: rootPane.track
-    }
-    model: trackModel
-
-    Image {
-      source: "qrc:/assets/images/没东西.svg"
-      fillMode: Image.PreserveAspectFit
-      anchors.centerIn: parent
-      visible: rootPane.track == null
-      Component.onCompleted: {
-        let a = root.width / 4
-        sourceSize.width = a
-        sourceSize.height = a
+      Image {
+        source: "qrc:/assets/images/没东西.svg"
+        fillMode: Image.PreserveAspectFit
+        anchors.centerIn: parent
+        visible: rootPane.track == null
+        Component.onCompleted: {
+          let a = root.width / 4
+          sourceSize.width = a
+          sourceSize.height = a
+        }
+        opacity: 0.7
       }
-      opacity: 0.7
-    }
 
-    footer: Item {
-      height: 50
-      width: root.implicitContentWidth
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.horizontalCenterOffset: 0 - scrollBar.width / 2
-      CutCornerBox {
-        anchors.bottom: parent.bottom
-        cutSize: 5
+      footer: Item {
+        height: 25
         width: parent.width
-        height: 15
-        backColor: QoolStyle.highlightColor
-        hasStroke: false
-      }
-      visible: rootPane.track != null
-    }
-
-    header: Item {
-      height: 50
-      width: root.implicitContentWidth
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.horizontalCenterOffset: 0 - scrollBar.width / 2
-      CutCornerBox {
-        //        anchors.bottom: parent.bottom
-        cutSize: 5
-        width: parent.width
-        height: 15
-        backColor: QoolStyle.infoColor
-        hasStroke: false
-        Text {
-          text: rootPane.track && rootPane.track.tag ? rootPane.track.tag : ""
-          anchors.centerIn: parent
-          color: QoolStyle.backgroundColor
+        visible: rootPane.track != null
+        SmallIndicator {
+          id: footerIndicator
+          text: "BOTTOM"
+          backColor: QoolStyle.commentColor
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
         }
-      }
-      visible: rootPane.track != null
-    }
+      } //footer
 
-    delegate: ClipInfoButton {
-      currentClip: model.clip
-      currentClipIndex: model.clipIndex
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.horizontalCenterOffset: 0 - scrollBar.width / 2
-      width: root.implicitContentWidth
-      height: 65
-    }
+      header: Item {
+        height: 25
+        width: parent.width
+        visible: rootPane.track != null
+        SmallIndicator {
+          id: headerIndicator
+          text: "TOP"
+          backColor: QoolStyle.tooltipColor
+          anchors.right: parent.right
+        }
+      } //header
+
+      delegate: ClipInfoButton {
+        x: root.width - width
+        currentClip: model.clip
+        currentClipIndex: model.clipIndex
+      }
+    } //ListView
 
     TrackViewScrollBar {
       id: scrollBar
       anchors.top: parent.top
       anchors.bottom: parent.bottom
-      anchors.right: parent.right
+      anchors.left: parent.left
       width: 25
       currentTrack: rootPane.track
       yPosition: root.visibleArea.yPosition
@@ -152,5 +137,5 @@ Pane {
         }
       }
     } //ScrollBar
-  }
+  } //contentItem
 }

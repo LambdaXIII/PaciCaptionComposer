@@ -70,5 +70,8 @@
         <file>assets/images/bookshelf.jpg</file>
         <file>assets/images/papers.jpg</file>
         <file>assets/CaptionComposer_bigicon.png</file>
+        <file>main_page/ClipInfoButton_bak.qml</file>
+        <file>main_page/TrackView_bak.qml</file>
+        <file>main_page/ClipEditWidget_bak.qml</file>
     </qresource>
 </RCC>
