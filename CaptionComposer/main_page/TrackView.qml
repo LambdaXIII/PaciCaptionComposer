@@ -31,25 +31,24 @@ QoolControl {
       anchors.left: scrollBar.right
       anchors.leftMargin: rootPane.extraContentPadding
 
-      //    populate: Transition {
-      //      id: popTransition
-      //      SequentialAnimation {
-      //        PropertyAction {
-      //          properties: "y"
-      //          value: popTransition.ViewTransition.destination.y + root.height
-      //        }
+      populate: Transition {
+        id: popTransition
+        SequentialAnimation {
+          PropertyAction {
+            properties: "x"
+            value: root.width
+          }
+          PauseAnimation {
+            duration: popTransition.ViewTransition.index * 50
+          }
+          NumberAnimation {
+            properties: "x"
+            duration: 200
+            easing.type: Easing.OutQuad
+          }
+        }
+      }
 
-      //        PauseAnimation {
-      //          duration: popTransition.ViewTransition.index * 100
-      //        }
-
-      //        NumberAnimation {
-      //          properties: "y"
-      //          duration: 500
-      //          easing.type: Easing.Bezier
-      //        }
-      //      }
-      //    }
       TrackModel {
         id: trackModel
         track: rootPane.track
