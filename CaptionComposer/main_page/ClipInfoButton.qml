@@ -244,6 +244,7 @@ QoolControl {
 
   QoolButton {
     id: groupControlButton
+    //保证只有一个ClipInfoButton处于编辑状态
     visible: false
     groupName: "clip_info_button_group"
     onCheckedChanged: if (!checked) {
