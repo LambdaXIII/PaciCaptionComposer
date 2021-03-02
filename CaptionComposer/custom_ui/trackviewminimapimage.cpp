@@ -64,7 +64,8 @@ QRectF TrackViewMinimapImage::clipboxRectOfIndex(int index) const {
   auto ideal_width = clip->wordCount() * word_pixel_ratio;
   auto box_width = width_gate(ideal_width);
 
-  qreal box_x = width() - box_width;
+//  qreal box_x = width() - box_width;
+  qreal box_x = 0;
   qreal box_y = index * m_clipboxHeight + index * m_clipboxSpacing;
 
   return { box_x, box_y, box_width, m_clipboxHeight };
