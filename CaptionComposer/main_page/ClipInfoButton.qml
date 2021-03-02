@@ -110,35 +110,44 @@ QoolControl {
     visible: !editingMode
   } //contentItem
 
-  ClipEditWidget {
-    id: editingField
+  Loader {
+    id: editingLoader
+    active: false
     anchors.fill: parent
     anchors.topMargin: element.topPadding
     anchors.leftMargin: element.leftPadding
     anchors.rightMargin: element.rightPadding
     anchors.bottomMargin: element.bottomPadding
-    buttonColor: themeControl.uiColor
     z: 55
     visible: element.editingMode
     onVisibleChanged: {
       if (visible) {
-        text = contentText.text
+        item.text = contentText.text
       }
     }
-    onAccepted: {
-      if (currentClip.content !== editingField.text) {
-        currentClip.content = editingField.text
-        UIBrain.mainDocument.justEdited()
-      }
-      close_edit()
+    sourceComponent: ClipEditWidget {
+      buttonColor: themeControl.uiColor
     }
-    onRejected: close_edit()
-  } //editingField
+    Connections {
+      target: editingLoader.item
+      function onAccepted() {
+        if (currentClip.content !== editingLoader.item.text) {
+          currentClip.content = editingLoader.item.text
+          UIBrain.mainDocument.justEdited()
+        }
+        close_edit()
+      }
+      function onRejected() {
+        close_edit()
+      }
+    }
+    onLoaded: editingLoader.item.text = contentText.text
+  } //editingLoader
 
   MouseArea {
     id: mainMouseArea
     property bool hovered: false
-    enabled: !editingField.visible
+    enabled: !editingMode
     anchors.fill: parent
     containmentMask: parent.backBox
     hoverEnabled: true
@@ -154,6 +163,7 @@ QoolControl {
     element.height = 200
     if (parent)
       element.width = parent.width
+    editingLoader.active = true
     editingMode = true
   }
 
