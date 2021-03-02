@@ -30,6 +30,7 @@ QoolControl {
       anchors.right: parent.right
       anchors.left: scrollBar.right
       anchors.leftMargin: rootPane.extraContentPadding
+
       //    populate: Transition {
       //      id: popTransition
       //      SequentialAnimation {

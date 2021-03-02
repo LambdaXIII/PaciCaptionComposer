@@ -122,6 +122,7 @@ QoolDialogWindow {
           color: QoolStyle.textColor
           selectionColor: QoolStyle.infoColor
           wrapMode: Text.WrapAnywhere
+          background: Item {}
         }
       }
     } //notearea

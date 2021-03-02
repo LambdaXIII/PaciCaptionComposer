@@ -33,17 +33,25 @@ QoolControl {
   property real defaultWidth
   property bool editingMode: false
 
+  readonly property real switchModeAnimationDuration: 200
+
   Component.onCompleted: {
     defaultHeight = height
     defaultWidth = width
   }
 
   Behavior on height {
-    NumberAnimation {}
+    NumberAnimation {
+      duration: switchModeAnimationDuration
+      easing.type: Easing.InOutCubic
+    }
   }
 
   Behavior on width {
-    NumberAnimation {}
+    NumberAnimation {
+      duration: switchModeAnimationDuration
+      easing.type: Easing.InOutCubic
+    }
   }
 
   QtObject {
@@ -55,13 +63,15 @@ QoolControl {
 
     Behavior on uiColor {
       ColorAnimation {
-        duration: 200
+        duration: switchModeAnimationDuration
+        easing.type: Easing.InOutCubic
       }
     }
 
     Behavior on backgroundColor {
       ColorAnimation {
-        duration: 200
+        duration: switchModeAnimationDuration
+        easing.type: Easing.InOutCubic
       }
     }
 
@@ -232,17 +242,28 @@ QoolControl {
     }
   } //menu
 
+  QoolButton {
+    id: groupControlButton
+    visible: false
+    groupName: "clip_info_button_group"
+    onCheckedChanged: if (!checked) {
+                        close_edit()
+                      }
+  }
+
   function open_edit() {
     element.height = 200
     if (parent)
       element.width = parent.width
     editingLoader.active = true
     editingMode = true
+    groupControlButton.checked = true
   }
 
   function close_edit() {
     element.height = defaultHeight
     element.width = defaultWidth
     editingMode = false
+    //    groupControlButton.checked = false
   }
 }
