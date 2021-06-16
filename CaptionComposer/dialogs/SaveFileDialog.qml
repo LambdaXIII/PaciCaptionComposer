@@ -11,7 +11,7 @@ FileDialog {
 
   //  selectExisting: false
   onAccepted: {
-    UIBrain.mainDocument.saveDocumentAs(fileUrl, selectedNameFilter)
+    UIBrain.mainDocument.saveDocumentAs(currentFile, selectedNameFilter)
     visible = false
   }
 }

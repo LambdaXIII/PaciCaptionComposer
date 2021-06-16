@@ -12,7 +12,8 @@ FileDialog {
   //  modality: Qt.
   //  fileMode: FileDialog.OpenFile
   onAccepted: {
-    UIBrain.mainDocument.openDocument(fileUrl, selectedNameFilter)
+    console.log(currentFile, selectedNameFilter.index, nameFilters)
+    UIBrain.mainDocument.openDocument(currentFile, selectedNameFilter.name)
     visible = false
   }
 }

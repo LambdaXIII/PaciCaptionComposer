@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
   QCoreApplication::setApplicationVersion("beta-1.0");
   QCoreApplication::setOrganizationName("PaciProject");
   //  QCoreApplication::setOrganizationDomain("org.paci");
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+//  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QGuiApplication app(argc, argv);
 

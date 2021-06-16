@@ -8,7 +8,7 @@ import Qt.labs.platform 1.1
 FileDialog {
   id: root
   title: qsTr("清选择需要导入的文件")
-//  folder: shortcuts.documents
+  //  folder: shortcuts.documents
   folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
   //  folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
   nameFilters: UIBrain.formatProfiler.allLoaderFiltersList
@@ -16,7 +16,7 @@ FileDialog {
   //  modality: Qt.
   //  fileMode: FileDialog.OpenFile
   onAccepted: {
-    UIBrain.mainDocument.importDocument(fileUrl, selectedNameFilter)
+    UIBrain.mainDocument.importDocument(currentFile, selectedNameFilter)
     visible = false
   }
 }
